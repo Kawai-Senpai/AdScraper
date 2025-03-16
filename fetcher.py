@@ -5,6 +5,10 @@ import logging
 import json
 from typing import Optional, List, Dict, Any, Union
 import os
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
