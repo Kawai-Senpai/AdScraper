@@ -37,19 +37,27 @@ def scrape_page_details(url):
     except Exception as e:
         print(f"Error closing pop-up: {e}")
 
-    #likes (https://www.facebook.com/fascatcoaching/friends_likes/)
-    likes_button = WebDriverWait(driver, 10).until(
-        EC.presence_of_element_located((By.XPATH, "//a[contains(@href, '/friends_likes/')]"))
-    )
-    likes_text = likes_button.text
-    print(likes_text)
+    try:
+        #likes (https://www.facebook.com/fascatcoaching/friends_likes/)
+        likes_button = WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.XPATH, "//a[contains(@href, '/friends_likes/')]"))
+        )
+        likes_text = likes_button.text
+        print(likes_text)
+    except Exception as e:
+        print(f"Error getting likes: {e}")
+        likes_text = None
 
-    #followers (https://www.facebook.com/fascatcoaching/followers/)
-    followers_button = WebDriverWait(driver, 10).until(
-        EC.presence_of_element_located((By.XPATH, "//a[contains(@href, '/followers/')]"))
-    )
-    followers_text = followers_button.text
-    print(followers_text)
+    try:
+        #followers (https://www.facebook.com/fascatcoaching/followers/)
+        followers_button = WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.XPATH, "//a[contains(@href, '/followers/')]"))
+        )
+        followers_text = followers_button.text
+        print(followers_text)
+    except Exception as e:
+        print(f"Error getting followers: {e}")
+        followers_text = None
 
     try:
         #Review (https://www.facebook.com/fascatcoaching/reviews)
@@ -60,12 +68,52 @@ def scrape_page_details(url):
         print(reviews_text)
     except Exception as e:
         print(f"Error getting reviews: {e}")
-        reviews_text = "No reviews found"
+        reviews_text = None
 
-    # get description
-    description_element = driver.find_element(By.XPATH, "/html/body/div[1]/div/div[1]/div/div[3]/div/div/div[1]/div[1]/div/div/div[4]/div[2]/div/div[1]/div[2]/div/div[1]/div/div/div/div/div[2]/div[1]/div/div/span")
-    description = description_element.text
-    print(description)
+    try:
+        # get description
+        description_element = driver.find_element(By.XPATH, "/html/body/div[1]/div/div[1]/div/div[3]/div/div/div[1]/div[1]/div/div/div[4]/div[2]/div/div[1]/div[2]/div/div[1]/div/div/div/div/div[2]/div[1]/div/div/span")
+        description = description_element.text
+        print(description)
+    except Exception as e:
+        print(f"Error getting description: {e}")
+        description = None
+
+    try:
+        # Person resonsible for the page
+        person_responsible = driver.find_element(By.XPATH, "/html/body/div[1]/div/div[1]/div/div[3]/div/div/div[1]/div[1]/div/div/div[4]/div[2]/div/div[1]/div[2]/div/div[1]/div/div/div/div/div[2]/div[2]/div/ul/div[2]/div[2]/div/div[1]/span")
+        person_responsible_text = person_responsible.text
+        print(person_responsible_text)
+    except Exception as e:
+        print(f"Error getting person responsible: {e}")
+        person_responsible_text = None
+
+    try:
+        # get mobile number
+        mobile_number = driver.find_element(By.XPATH, "/html/body/div[1]/div/div[1]/div/div[3]/div/div/div[1]/div[1]/div/div/div[4]/div[2]/div/div[1]/div[2]/div/div[1]/div/div/div/div/div[2]/div[2]/div/ul/div[3]/div[2]/div/div/span")
+        mobile_number_text = mobile_number.text
+        print(mobile_number_text)
+    except Exception as e:
+        print(f"Error getting mobile number: {e}")
+        mobile_number_text = None
+
+    try: 
+        # get email
+        email = driver.find_element(By.XPATH, "/html/body/div[1]/div/div[1]/div/div[3]/div/div/div[1]/div[1]/div/div/div[4]/div[2]/div/div[1]/div[2]/div/div[1]/div/div/div/div/div[2]/div[2]/div/ul/div[4]/div[2]/div/div/span")
+        email_text = email.text
+        print(email_text)
+    except Exception as e:
+        print(f"Error getting email: {e}")
+        email_text = None
+
+    try:
+        # get website
+        website = driver.find_element(By.XPATH, "/html/body/div[1]/div/div[1]/div/div[3]/div/div/div[1]/div[1]/div/div/div[4]/div[2]/div/div[1]/div[2]/div/div[1]/div/div/div/div/div[2]/div[2]/div/ul/div[5]/div[2]/div/a/div/div/span")
+        website_text = website.text
+        print(website_text)
+    except Exception as e:
+        print(f"Error getting website: {e}")
+        website_text = None
 
     return {
         "page_name": page_name,
@@ -73,7 +121,11 @@ def scrape_page_details(url):
         "likes": likes_text,
         "followers": followers_text,
         "reviews": reviews_text,
-        "description": description
+        "description": description,
+        "person_responsible": person_responsible_text,
+        "mobile_number": mobile_number_text,
+        "email": email_text,
+        "website": website_text
     }
 
 def download_video(url, path="video.mp4"):
